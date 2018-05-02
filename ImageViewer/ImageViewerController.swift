@@ -68,7 +68,7 @@ private extension ImageViewerController {
     func setupGestureRecognizers() {
         let doubleTapGestureRecognizer = UITapGestureRecognizer()
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        doubleTapGestureRecognizer.addTarget(self, action: #selector(imageViewDoubleTapped))
+        doubleTapGestureRecognizer.addTarget(self, action: #selector(imageViewDoubleTapped(_:)))
         imageView.addGestureRecognizer(doubleTapGestureRecognizer)
 
         let singleTapGestureRecognizer = UITapGestureRecognizer()
@@ -105,11 +105,12 @@ private extension ImageViewerController {
         dismiss(animated: true)
     }
     
-    @objc func imageViewDoubleTapped() {
+    @objc func imageViewDoubleTapped(_ tapGesture: UITapGestureRecognizer) {
         if scrollView.zoomScale > scrollView.minimumZoomScale {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         } else {
-            scrollView.setZoomScale(scrollView.maximumZoomScale, animated: true)
+            let location = tapGesture.location(in: imageView)
+            scrollView.zoom(to: CGRect(origin: location, size: .zero), animated: true)
         }
     }
 
